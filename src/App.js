@@ -31,15 +31,16 @@ class App extends React.Component {
 
     this.state = {
       title: props.title,
-      currentGuessIndex: 0,
-      currentLetterIndex: 0,
-      totalGuesses: 6,
-      wordLength: 5,
-      words: words,
+      currentGuessIndex: 0,  // board state -- which guess we're on
+      currentLetterIndex: 0,  // board state -- which letter we're on in the word
+      totalGuesses: 6,  // board init -- how many guesses in the game
+      wordLength: 5,  // board init -- how many characters in the word
+      words: words,  // the state of the guesses on the board
       gameState: "GUESS",  // GUESS, WIN, LOSE
-      answer: "QUOTE",
-      dictionary: dictionary,
+      answer: "QUOTE",  // The current word to guess.
+      dictionary: dictionary, // All the words to choose from
     };
+
     console.log(this.state.dictionary);
     this.handleKeyboardPress = this.handleKeyboardPress.bind(this);
   }
