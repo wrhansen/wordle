@@ -42,24 +42,46 @@ class App extends React.Component {
     };
 
     console.log(this.state.dictionary);
-    this.handleKeyboardPress = this.handleKeyboardPress.bind(this);
+    this.handleKeyboardButtonClick = this.handleKeyboardButtonClick.bind(this);
+    this.keyDownHandler = this.keyDownHandler.bind(this);
   }
 
-  handleKeyboardPress(e, Key) {
+  componentDidMount() {
+    document.addEventListener("keydown", this.keyDownHandler);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.keyDownHandler);
+  }
+
+  keyDownHandler(event) {
+    console.log("keypress event", event);
+    let key = event.key.toUpperCase();
+    this.handleKeyboardButtonClick(event, key);
+
+  }
+
+  handleKeyboardButtonClick(e, Key) {
     if (["WIN", "LOSE"].includes(this.state.gameState)) {
       console.log("GAMEOVER");
       return;
     }
 
+    let alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+
     console.log("Key pressed!!!!!", Key);
-    if (Key === "DELETE") {
+
+    if (Key === "DELETE" || Key === "BACKSPACE") {
       this.deleteFromWordGrid();
     }
     else if (Key === "ENTER") {
       this.confirmWord();
     }
-    else {
+    else if (alphabet.includes(Key)) {
       this.addLetterToWordGrid(Key);
+    }
+    else {
+      console.log("Ignore unknown key", Key);
     }
   }
 
@@ -210,7 +232,7 @@ class App extends React.Component {
             {wordElements}
           </div>
         </div>
-        <Keyboard handleKeyPress={this.handleKeyboardPress} />
+        <Keyboard handleKeyPress={this.handleKeyboardButtonClick} />
       </div>
     );
   }
