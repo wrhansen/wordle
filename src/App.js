@@ -5,6 +5,8 @@ import dictionary from './data/five_letter_words.json';
 import Keyboard from './Keyboard';
 import Letter from './Letter';
 
+/* The App class is the main class that renders the entire game. It contains the
+state of the game, and the logic for the game */
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -61,6 +63,14 @@ class App extends React.Component {
 
   }
 
+  /**
+   * If the game is over, ignore the key press. Otherwise, if the key is a
+   * backspace, delete a letter from the word grid. If the key is an enter, confirm
+   * the word. If the key is a letter, add the letter to the word grid
+   * @param e - The event object
+   * @param Key - The key that was pressed
+   * @returns the state of the game.
+   */
   handleKeyboardButtonClick(e, Key) {
     if (["WIN", "LOSE"].includes(this.state.gameState)) {
       console.log("GAMEOVER");
@@ -85,6 +95,11 @@ class App extends React.Component {
     }
   }
 
+  /**
+   * It takes the current word from the state, maps over it, and returns the
+   * letters that have been guessed
+   * @returns The current word that the user is trying to guess.
+   */
   getCurrentWord() {
     let letters = this.state.words[this.state.currentGuessIndex]
     let word = letters.map((letter) => {
@@ -99,6 +114,10 @@ class App extends React.Component {
     return word.join('');
   }
 
+  /**
+   * It returns the last letter of the current word, and the index of that letter
+   * @returns An array with the current letter and the current letter index.
+   */
   getLastLetter() {
     let currentGuessIndex = this.state.currentGuessIndex;
     let currentLetterIndex = this.state.currentLetterIndex - 1;
@@ -109,6 +128,11 @@ class App extends React.Component {
     return [currentWord.letter, currentLetterIndex];
   }
 
+  /**
+   * We're going to get the last letter in the word grid, and if it's not null,
+   * we're going to set it to null
+   * @returns The last letter in the word grid.
+   */
   deleteFromWordGrid() {
     console.log("DELETING Letter from WordGrid!");
 
@@ -131,6 +155,12 @@ class App extends React.Component {
     }
   }
 
+  /**
+   * If the player has added enough letters to the current guess, check if the
+   * current guess is a valid word. If it is, check if it's the answer. If it's not
+   * the answer, move to the next guess
+   * @returns The current word in the word grid.
+   */
   confirmWord() {
     console.log("Confirming latest word in WordGrid!");
     if (this.canAddLetter() === true) {
@@ -176,6 +206,12 @@ class App extends React.Component {
     });
   }
 
+  /**
+   * If the current letter index is greater than or equal to the word length,
+   * return false. Otherwise, if the current letter is null, return true.
+   * Otherwise, return false
+   * @returns A boolean value.
+   */
   canAddLetter() {
     if (this.state.currentLetterIndex >= this.state.wordLength) {
       return false;
@@ -189,6 +225,12 @@ class App extends React.Component {
     return false;
   }
 
+  /**
+   * We're updating the state of the current letter in the current word in the
+   * current guess
+   * @param letter - The letter to add to the word grid
+   * @returns The state is being returned.
+   */
   addLetterToWordGrid(letter) {
     console.log(`Entering letter ${letter} into WordGrid!`, this.state);
 
@@ -212,6 +254,12 @@ class App extends React.Component {
 
   }
 
+  /**
+   * We map over the words array in state, and for each word, we map over the
+   * letters array in state, and for each letter, we render a Letter component
+   * @returns The return statement is returning the JSX that will be rendered to
+   * the DOM.
+   */
   render() {
     const wordElements = this.state.words.map((word, index) => (
       <div className="WordGuessRow" key={index}>
